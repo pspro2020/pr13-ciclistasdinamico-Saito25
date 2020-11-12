@@ -29,7 +29,7 @@ public class StageManager extends Phaser {
                 break;
             case THIRD_STAGE_FUEL_STATION:
                 arriveFuelStation(registeredParties);
-                return true;
+                break;
         }
         return super.onAdvance(phase, registeredParties);
     }

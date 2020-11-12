@@ -12,6 +12,7 @@ public class ImpacientCyclist extends Cyclist {
     @Override
     public void run() {
         phaser.register();
+
         try {
             goOutHome();
         } catch (InterruptedException e) {
@@ -36,7 +37,12 @@ public class ImpacientCyclist extends Cyclist {
         }
         phaser.arriveAndDeregister();
         try {
+            System.out.printf("%s -> %s: Ya no espero a nadie, sois %d\n",
+                    LocalTime.now().format(dateTimeFormatter),
+                    name,
+                    phaser.getRegisteredParties());
             goToFuelStation();
+
         } catch (InterruptedException e) {
             System.out.printf("%s -> %s: Recordó que tenía que entregar un trabajo importante mañana" +
                             "¡Y que no lo había ni empezado! Corrió como nunca hacia casa. Lo terminaron despidiendo.\n",

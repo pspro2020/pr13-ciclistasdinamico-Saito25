@@ -12,11 +12,13 @@ public class TardyFriend extends Cyclist {
     @Override
     public void run() {
         if (!phaser.isTerminated()) {
+
             int joinPhase = phaser.register();
-            System.out.printf("%s -> %s: Chavales, que me uno a vosotros en la fase %d\n",
+            System.out.printf("%s -> %s: Chavales, que me uno a vosotros en la fase %d somos %d\n",
                     LocalTime.now().format(dateTimeFormatter),
                     name,
-                    joinPhase);
+                    joinPhase,
+                    phaser.getRegisteredParties());
 
             if (joinPhase <= StageManager.FIRST_STAGE_FUEL_STATION) {
                 try {
@@ -31,6 +33,7 @@ public class TardyFriend extends Cyclist {
             if (joinPhase <= StageManager.SECOND_STAGE_INN) {
                 try {
                     goToInn();
+                    phaser.awaitAdvanceInterruptibly(phaser.arrive());
                 } catch (InterruptedException e) {
                     System.out.printf("%s -> %s: Recordó que tenía que entregar un trabajo importante mañana" +
                                     "¡Y que no lo había ni empezado! Corrió como nunca hacia casa. Lo terminaron despidiendo.\n",
@@ -42,6 +45,7 @@ public class TardyFriend extends Cyclist {
             if (joinPhase <= StageManager.THIRD_STAGE_FUEL_STATION) {
                 try {
                     goToFuelStation();
+                    phaser.awaitAdvanceInterruptibly(phaser.arrive());
                 } catch (InterruptedException e) {
                     System.out.printf("%s -> %s: Recordó que tenía que entregar un trabajo importante mañana" +
                                     "¡Y que no lo había ni empezado! Corrió como nunca hacia casa. Lo terminaron despidiendo.\n",
